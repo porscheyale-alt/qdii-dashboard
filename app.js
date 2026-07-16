@@ -33,7 +33,7 @@
   else{
     fetch("data.json").then(r=>r.json()).then(boot).catch(err=>{
       document.getElementById("tbody").innerHTML =
-        '<tr><td colspan="6" class="empty">数据加载失败：请通过本地服务器打开，或运行 fetch_data.py 生成 data.json</td></tr>';
+        '<tr><td colspan="7" class="empty">数据加载失败：请通过本地服务器打开，或运行 fetch_data.py 生成 data.json</td></tr>';
     });
   }
 
@@ -98,15 +98,15 @@
     const bot = fs.slice().sort((a,b)=>a.latest_rate-b.latest_rate)[0];
     const avgCls = avg>0?UP:(avg<0?DOWN:"");
     const cards = [
-      {l:"今日上涨",v:`<span class="up">${up}</span> <small>只</small>`},
-      {l:"今日下跌",v:`<span class="down">${down}</span> <small>只</small>`},
-      {l:"平盘",v:`${flat} <small>只</small>`},
-      {l:"平均涨跌幅",v:`<span class="${avgCls}">${(avg>0?"+":"")+avg.toFixed(2)}%</span>`},
-      {l:"涨幅榜首",v:top?`<span class="up">+${top.latest_rate.toFixed(2)}%</span><br><small>${top.name.slice(0,10)}</small>`:"--"},
-      {l:"跌幅榜首",v:bot?`<span class="${bot.latest_rate<0?'down':''}">${bot.latest_rate.toFixed(2)}%</span><br><small>${bot.name.slice(0,10)}</small>`:"--"},
+      {l:"今日上涨",cc:"c-up",v:`<span class="up">${up}</span> <small>只</small>`},
+      {l:"今日下跌",cc:"c-down",v:`<span class="down">${down}</span> <small>只</small>`},
+      {l:"平盘",cc:"",v:`${flat} <small>只</small>`},
+      {l:"平均涨跌幅",cc:avg>0?"c-up":(avg<0?"c-down":""),v:`<span class="${avgCls}">${(avg>0?"+":"")+avg.toFixed(2)}%</span>`},
+      {l:"涨幅榜首",cc:"c-up",v:top?`<span class="up">+${top.latest_rate.toFixed(2)}%</span><br><small>${top.name.slice(0,10)}</small>`:"--"},
+      {l:"跌幅榜首",cc:"c-down",v:bot?`<span class="${bot.latest_rate<0?'down':''}">${bot.latest_rate.toFixed(2)}%</span><br><small>${bot.name.slice(0,10)}</small>`:"--"},
     ];
     document.getElementById("summary").innerHTML = cards.map(c=>
-      `<div class="scard"><div class="lbl">${c.l}</div><div class="val">${c.v}</div></div>`).join("");
+      `<div class="scard ${c.cc}"><div class="lbl">${c.l}</div><div class="val">${c.v}</div></div>`).join("");
   }
 
   function sparkline(canvas, hist){
@@ -135,14 +135,15 @@
     tb.innerHTML = arr.map((f,i)=>{
       const r = fmtRate(f.latest_rate);
       const on = isFav(f.code);
+      const pillCls = r.c===UP?"up":(r.c===DOWN?"down":"flat");
       return `<tr data-code="${f.code}">
         <td class="star-col"><span class="star ${on?'on':''}" data-fav="${f.code}" title="${on?'取消自选':'加入自选'}">${on?'★':'☆'}</span></td>
         <td class="fname">${f.name}<div class="code">${f.code}</div></td>
-        <td><span class="grp-tag">${f.group}</span></td>
+        <td class="col-group"><span class="grp-tag">${f.group}</span></td>
         <td class="num">${f.latest_nav.toFixed(4)}</td>
-        <td class="num ${r.c}">${r.t}</td>
-        <td><canvas class="spark" id="sp_${f.code}" width="110" height="30"></canvas></td>
-        <td class="num code">${f.latest_date}</td>
+        <td class="num"><span class="pill ${pillCls}">${r.t}</span></td>
+        <td class="col-spark"><canvas class="spark" id="sp_${f.code}" width="110" height="30"></canvas></td>
+        <td class="num code col-date">${f.latest_date}</td>
       </tr>`;
     }).join("");
     arr.forEach(f=>{ const cv=document.getElementById("sp_"+f.code); if(cv) sparkline(cv,f.history); });
@@ -168,7 +169,7 @@
     const r=fmtRate(f.latest_rate), chgCls=chg>0?UP:(chg<0?DOWN:"");
     document.getElementById("dStats").innerHTML = `
       <div class="dstat"><div class="l">最新净值</div><div class="v">${last.toFixed(4)}</div></div>
-      <div class="dstat"><div class="l">今日涨跌</div><div class="v ${r.c}">${r.t}</div></div>
+      <div class="dstat"><div class="l">今日涨跌</div><div class="v"><span class="pill ${r.c===UP?'up':(r.c===DOWN?'down':'flat')}">${r.t}</span></div></div>
       <div class="dstat"><div class="l">近${hist.length}日累计</div><div class="v ${chgCls}">${(chg>0?"+":"")+chg.toFixed(2)}%</div></div>
       <div class="dstat"><div class="l">区间最高</div><div class="v">${maxNav.toFixed(4)}</div></div>
       <div class="dstat"><div class="l">区间最低</div><div class="v">${minNav.toFixed(4)}</div></div>
