@@ -1,5 +1,5 @@
-# 不上 git：含本地绝对路径的抓数脚本 & 日志
-fetch_data.py
+# gen_funds.py 含本地 Excel 绝对路径，仅本地用；fetch_data.py 已改为读 funds.json，纳入 git 供云端运行
+gen_funds.py
 *.log
 run.log
 server.log

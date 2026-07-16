@@ -1,0 +1,37 @@
+name: 更新 QDII 净值数据
+
+on:
+  schedule:
+    # UTC 12:00 = 北京时间 20:00，周一至周五（QDII 净值 T+1 晚间公布）
+    - cron: "0 12 * * 1-5"
+  workflow_dispatch: {}  # 支持手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 抓取最新净值
+        run: python fetch_data.py
+
+      - name: 提交并推送更新
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html data.json
+          if git diff --staged --quiet; then
+            echo "数据无变化，跳过提交。"
+          else
+            git commit -m "data: 自动更新净值 $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push
+          fi
