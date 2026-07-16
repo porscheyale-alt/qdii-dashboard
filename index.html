@@ -70,6 +70,7 @@ header h1 .dot{width:10px;height:10px;border-radius:50%;background:#6ee7a8;
 .sortsel{padding:10px 12px;border:1px solid var(--line);border-radius:11px;background:var(--card);
   font-size:13px;cursor:pointer;box-shadow:var(--shadow);outline:none;transition:border-color .15s}
 .sortsel:focus{border-color:var(--brand)}
+.toolbar-inline{display:flex;gap:8px;align-items:center;flex:1}
 
 /* 列表 */
 .tablewrap{background:var(--card);border:1px solid var(--line);border-radius:14px;
@@ -109,18 +110,30 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
 @media (max-width:720px){
   header{padding:14px 16px}
   header h1{font-size:16px}
-  .wrap{padding:16px 12px 50px}
-  .summary{grid-template-columns:repeat(2,1fr);gap:10px}
-  .scard{padding:13px 14px}
-  .scard .val{font-size:21px}
+  .wrap{padding:12px 10px 50px}
+  .summary{grid-template-columns:repeat(2,1fr);gap:8px}
+  .scard{padding:11px 12px}
+  .scard .val{font-size:19px}
+  /* 手机端工具栏紧凑化：tab 缩小 + 搜索排序合一行 */
+  .toolbar{gap:8px;margin-bottom:10px;flex-wrap:nowrap;flex-direction:column}
+  .tabs{padding:3px;border-radius:9px;gap:3px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{padding:5px 11px;border-radius:7px;font-size:13px;flex-shrink:0}
+  .tab .cnt{display:none}  /* 手机端隐藏自选数量，节省空间 */
+  .search{min-width:0;max-width:none;flex:1}
+  .search input{padding:8px 12px 8px 32px;font-size:13px;border-radius:9px}
+  .search::before{left:10px;font-size:12px}
+  .sortsel{padding:8px 8px;border-radius:9px;font-size:12px;min-width:0;flex-shrink:0;width:auto}
   /* 手机端保留走势图（核心价值），只隐藏分组和净值日期 */
   .col-group,.col-date{display:none}
   .fname{max-width:none;font-size:13px}
-  tbody td,thead th{padding:11px 8px}
-  .col-spark{padding-left:4px;padding-right:4px}
-  .pill{min-width:58px;padding:4px 7px;font-size:12px}
-  th.star-col,td.star-col{width:32px;padding-left:4px;padding-right:2px}
+  tbody td,thead th{padding:10px 7px}
+  .col-spark{padding-left:3px;padding-right:3px}
+  .pill{min-width:54px;padding:3px 6px;font-size:12px}
+  th.star-col,td.star-col{width:30px;padding-left:4px;padding-right:2px}
   .star{font-size:17px}
+  .tablewrap{border-radius:11px}
+  thead th{padding:9px 7px;font-size:11px}
 }
 
 /* 详情抽屉 */
@@ -157,12 +170,14 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
   <div class="summary" id="summary"></div>
   <div class="toolbar">
     <div class="tabs" id="tabs"></div>
-    <div class="search"><input id="searchInput" placeholder="搜索基金名称 / 代码"></div>
-    <select class="sortsel" id="sortSel">
+    <div class="toolbar-inline">
+      <div class="search"><input id="searchInput" placeholder="搜索基金名称 / 代码"></div>
+      <select class="sortsel" id="sortSel">
       <option value="rate_desc">按今日涨幅↓</option>
       <option value="rate_asc">按今日涨幅↑</option>
       <option value="name">按名称</option>
     </select>
+    </div>
   </div>
   <div class="tablewrap">
     <table>
@@ -13725,6 +13740,6 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
     }
   ]
 }</script>
-<script src="app.js?v=20260716f"></script>
+<script src="app.js?v=20260716g"></script>
 </body>
 </html>
