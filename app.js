@@ -3,6 +3,9 @@
   const UP="up", DOWN="down";
   // 读取内联数据；若为占位符（本地未内联），则回退 fetch data.json
   let DATA = null;
+  let state = { group:"全部", kw:"", sort:"rate_desc" };
+  let chart = null;
+
   try{
     const raw = document.getElementById("fundData").textContent.trim();
     if(raw && raw[0]==="{") DATA = JSON.parse(raw);
@@ -20,9 +23,6 @@
         '<tr><td colspan="6" class="empty">数据加载失败：请通过本地服务器打开，或运行 fetch_data.py 生成 data.json</td></tr>';
     });
   }
-
-  let state = { group:"全部", kw:"", sort:"rate_desc" };
-  let chart = null;
 
   function fmtRate(r){
     if(r===null||r===undefined) return {t:"--",c:""};
