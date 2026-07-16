@@ -6,6 +6,19 @@
   let state = { group:"全部", kw:"", sort:"rate_desc" };
   let chart = null;
 
+  // 自选：存 localStorage，按基金代码记忆，每个浏览器独立
+  const FAV_KEY = "qdii_favs";
+  function loadFavs(){
+    try{ return new Set(JSON.parse(localStorage.getItem(FAV_KEY)||"[]")); }
+    catch(e){ return new Set(); }
+  }
+  let favs = loadFavs();
+  function isFav(code){ return favs.has(code); }
+  function toggleFav(code){
+    if(favs.has(code)) favs.delete(code); else favs.add(code);
+    localStorage.setItem(FAV_KEY, JSON.stringify([...favs]));
+  }
+
   try{
     const raw = document.getElementById("fundData").textContent.trim();
     if(raw && raw[0]==="{") DATA = JSON.parse(raw);
@@ -53,7 +66,8 @@
 
   function buildTabs(){
     const el = document.getElementById("tabs");
-    el.innerHTML = groups().map(g=>
+    const favTab = `<div class="tab ${state.group==='自选'?'active':''}" data-g="自选">★ 自选<span class="cnt">${favs.size}</span></div>`;
+    el.innerHTML = favTab + groups().map(g=>
       `<div class="tab ${g===state.group?'active':''}" data-g="${g}">${g}</div>`).join("");
     el.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
       state.group=t.dataset.g; buildTabs(); buildTable();
@@ -62,7 +76,8 @@
 
   function filtered(){
     let arr = DATA.funds.slice();
-    if(state.group!=="全部") arr = arr.filter(f=>f.group===state.group);
+    if(state.group==="自选") arr = arr.filter(f=>isFav(f.code));
+    else if(state.group!=="全部") arr = arr.filter(f=>f.group===state.group);
     if(state.kw){
       const k = state.kw.toLowerCase();
       arr = arr.filter(f=>f.name.toLowerCase().includes(k)||f.code.includes(k));
@@ -110,10 +125,18 @@
   function buildTable(){
     const arr = filtered();
     const tb = document.getElementById("tbody");
-    if(!arr.length){ tb.innerHTML='<tr><td colspan="6" class="empty">无匹配基金</td></tr>'; return; }
+    if(!arr.length){
+      const msg = state.group==="自选"
+        ? "还没有自选基金。点任意一行左侧的 ☆ 收藏，收藏后可在这里集中查看。"
+        : "无匹配基金";
+      tb.innerHTML = '<tr><td colspan="7" class="empty">'+msg+'</td></tr>';
+      return;
+    }
     tb.innerHTML = arr.map((f,i)=>{
       const r = fmtRate(f.latest_rate);
+      const on = isFav(f.code);
       return `<tr data-code="${f.code}">
+        <td class="star-col"><span class="star ${on?'on':''}" data-fav="${f.code}" title="${on?'取消自选':'加入自选'}">${on?'★':'☆'}</span></td>
         <td class="fname">${f.name}<div class="code">${f.code}</div></td>
         <td><span class="grp-tag">${f.group}</span></td>
         <td class="num">${f.latest_nav.toFixed(4)}</td>
@@ -123,7 +146,14 @@
       </tr>`;
     }).join("");
     arr.forEach(f=>{ const cv=document.getElementById("sp_"+f.code); if(cv) sparkline(cv,f.history); });
+    // 行点击开抽屉；星标点击切换自选（阻止冒泡，避免同时开抽屉）
     tb.querySelectorAll("tr[data-code]").forEach(tr=>tr.onclick=()=>openDrawer(tr.dataset.code));
+    tb.querySelectorAll(".star").forEach(s=>s.onclick=(e)=>{
+      e.stopPropagation();
+      toggleFav(s.dataset.fav);
+      buildTabs();
+      buildTable();
+    });
   }
 
   function openDrawer(code){
