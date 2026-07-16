@@ -94,7 +94,7 @@ tbody tr:hover{background:#eef3ff}
 .pill.up{color:var(--up);background:var(--up-bg)}
 .pill.down{color:var(--down);background:var(--down-bg)}
 .pill.flat{color:var(--sub);background:#f0f1f4}
-.spark{width:110px;height:30px}
+.spark{display:block}
 /* 自选星标 */
 .star{cursor:pointer;font-size:19px;line-height:1;color:#d3d6dc;user-select:none;
   transition:transform .12s,color .12s;display:inline-block}
@@ -112,9 +112,14 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
   .summary{grid-template-columns:repeat(2,1fr);gap:10px}
   .scard{padding:13px 14px}
   .scard .val{font-size:21px}
-  .col-group,.col-spark,.col-date{display:none}
-  .fname{max-width:none}
-  tbody td,thead th{padding:11px 10px}
+  /* 手机端保留走势图（核心价值），只隐藏分组和净值日期 */
+  .col-group,.col-date{display:none}
+  .fname{max-width:none;font-size:13px}
+  tbody td,thead th{padding:11px 8px}
+  .col-spark{padding-left:4px;padding-right:4px}
+  .pill{min-width:58px;padding:4px 7px;font-size:12px}
+  th.star-col,td.star-col{width:32px;padding-left:4px;padding-right:2px}
+  .star{font-size:17px}
 }
 
 /* 详情抽屉 */
@@ -13719,6 +13724,6 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
     }
   ]
 }</script>
-<script src="app.js?v=20260716d"></script>
+<script src="app.js?v=20260716e"></script>
 </body>
 </html>

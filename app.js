@@ -5,6 +5,7 @@
   let DATA = null;
   let state = { group:"全部", kw:"", sort:"rate_desc" };
   let chart = null;
+  let _resizeBound=false, _lastMobile=null, _rzTimer=null;
 
   // 自选：存 localStorage，按基金代码记忆，每个浏览器独立
   const FAV_KEY = "qdii_favs";
@@ -56,6 +57,21 @@
       "颜色遵循 A 股习惯：<span class='up'>涨为红</span> / <span class='down'>跌为绿</span>。"+
       "点击任意一行查看近 30 日净值走势。额度信息因每日变化极小，未纳入监控。";
     bindEvents();
+    bindResizeOnce();
+  }
+
+  // 跨越 720px 断点时重建表格，让走势图切换到对应尺寸（防抖，仅绑定一次）
+  function bindResizeOnce(){
+    if(_resizeBound) return;
+    _resizeBound=true;
+    _lastMobile=window.matchMedia("(max-width:720px)").matches;
+    window.addEventListener("resize",()=>{
+      clearTimeout(_rzTimer);
+      _rzTimer=setTimeout(()=>{
+        const nowMobile=window.matchMedia("(max-width:720px)").matches;
+        if(nowMobile!==_lastMobile){ _lastMobile=nowMobile; buildTable(); }
+      },200);
+    });
   }
 
   function groups(){
@@ -132,6 +148,9 @@
       tb.innerHTML = '<tr><td colspan="7" class="empty">'+msg+'</td></tr>';
       return;
     }
+    // 手机端走势图缩窄（Chart.js responsive:false 读 canvas 属性尺寸，故由 JS 控制）
+    const isMobile = window.matchMedia("(max-width:720px)").matches;
+    const spW = isMobile?66:110, spH = isMobile?26:30;
     tb.innerHTML = arr.map((f,i)=>{
       const r = fmtRate(f.latest_rate);
       const on = isFav(f.code);
@@ -142,7 +161,7 @@
         <td class="col-group"><span class="grp-tag">${f.group}</span></td>
         <td class="num">${f.latest_nav.toFixed(4)}</td>
         <td class="num"><span class="pill ${pillCls}">${r.t}</span></td>
-        <td class="col-spark"><canvas class="spark" id="sp_${f.code}" width="110" height="30"></canvas></td>
+        <td class="col-spark"><canvas class="spark" id="sp_${f.code}" width="${spW}" height="${spH}"></canvas></td>
         <td class="num code col-date">${f.latest_date}</td>
       </tr>`;
     }).join("");
