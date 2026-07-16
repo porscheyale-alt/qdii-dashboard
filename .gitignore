@@ -1,0 +1,7 @@
+# 不上 git：含本地绝对路径的抓数脚本 & 日志
+fetch_data.py
+*.log
+run.log
+server.log
+dist/
+.workbuddy/
