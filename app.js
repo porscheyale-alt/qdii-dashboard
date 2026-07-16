@@ -47,8 +47,12 @@
 
   function render(){
     if(!DATA) return;
-    document.getElementById("metaInfo").textContent =
-      "数据更新："+DATA.updated_at+" ｜ 共 "+DATA.count+" 只";
+    // 以「净值日期」为主（甲方最关心看的是哪天的净值），抓取时间作次要信息
+    // 各基金 T+1/T+2 不一，取最新的净值日期作代表
+    const navDate = DATA.funds.reduce((m,f)=> f.latest_date>m?f.latest_date:m, "");
+    const fetchTime = (DATA.updated_at||"").slice(5,16); // 07-16 11:36
+    document.getElementById("metaInfo").innerHTML =
+      "净值日期 <b>"+navDate+"</b> ｜ 共 "+DATA.count+" 只 ｜ 数据抓取 "+fetchTime;
     buildTabs();
     buildSummary();
     buildTable();
