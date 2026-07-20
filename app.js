@@ -144,6 +144,8 @@
     if(state.sort==="rate_desc") arr.sort((a,b)=>(b.latest_rate??-999)-(a.latest_rate??-999));
     else if(state.sort==="rate_asc") arr.sort((a,b)=>(a.latest_rate??999)-(b.latest_rate??999));
     else arr.sort((a,b)=>a.name.localeCompare(b.name,"zh"));
+    // 展示优先：博时产品置顶（数据不变，仅调整显示顺序），组内保持上面的排序
+    arr.sort((a,b)=>(b.name.startsWith("博时")?1:0)-(a.name.startsWith("博时")?1:0));
     return arr;
   }
 
