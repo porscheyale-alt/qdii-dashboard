@@ -90,7 +90,10 @@
 
   function groups(){
     const g = ["全部"];
-    DATA.funds.forEach(f=>{ if(!g.includes(f.group)) g.push(f.group); });
+    DATA.funds.forEach(f=>{
+      if(f.group && !g.includes(f.group)) g.push(f.group);
+      (f.tags||[]).forEach(t=>{ if(!g.includes(t)) g.push(t); });
+    });
     return g;
   }
 
@@ -107,7 +110,9 @@
   function filtered(){
     let arr = DATA.funds.slice();
     if(state.group==="自选") arr = arr.filter(f=>isFav(f.code));
-    else if(state.group!=="全部") arr = arr.filter(f=>f.group===state.group);
+    else if(state.group!=="全部"){
+      arr = arr.filter(f=>f.group===state.group || (f.tags||[]).includes(state.group));
+    }
     if(state.kw){
       const k = state.kw.toLowerCase();
       arr = arr.filter(f=>f.name.toLowerCase().includes(k)||f.code.includes(k));
