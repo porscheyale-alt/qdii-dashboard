@@ -14,6 +14,13 @@ OUT = os.path.join(BASE, "data.json")
 HISTORY_DAYS = 30  # 每只基金抓取的历史净值条数
 WORKERS = 8        # 并发线程数（多频次抓取需保证每次够快，同时不触发限速）
 
+# 额度覆盖表：接口只返回"限大额/暂停"等简写、未带具体金额时，
+# 用人工确认真实限额补齐（例：018738 博时标普500联接E 实测单日限额100元）。
+# 抓数后套用，确保每日自动跑数不被覆盖。key=基金代码，value=覆盖后的额度文本。
+QUOTA_OVERRIDE = {
+    "018738": "限大额(单日上限100元)",
+}
+
 
 def load_funds():
     """从仓库内 funds.json 读出 (code, name, group) 列表。
@@ -83,9 +90,42 @@ def process_one(f):
         f2["latest_rate"] = latest["rate"]
         f2["history"] = hist
         f2["quota"] = fetch_quota(f["code"])  # 申购额度/状态
+        if f["code"] in QUOTA_OVERRIDE and f2["quota"]:
+            f2["quota"] = QUOTA_OVERRIDE[f["code"]]
         return f["code"], f2
     except Exception as e:
         return f["code"], ("ERR", str(e))
+
+
+def fetch_indices():
+    """抓取美股核心指数（纳指综指/标普500/道琼斯）最新点位与涨跌幅，供看板顶部展示参照系。
+    数据来源东财行情接口。失败不影响主流程，返回空列表。"""
+    # (展示名, secid)
+    idx_list = [("纳斯达克", "100.NDX"), ("标普500", "100.SPX"), ("道琼斯", "100.DJIA")]
+    out = []
+    for name, secid in idx_list:
+        try:
+            url = (f"https://push2.eastmoney.com/api/qt/stock/get?secid={secid}"
+                   f"&fields=f43,f58,f169,f170,f60,f86")
+            req = urllib.request.Request(url, headers={
+                "User-Agent": "Mozilla/5.0",
+                "Referer": "https://quote.eastmoney.com/"})
+            d = json.loads(urllib.request.urlopen(req, timeout=15).read().decode()) .get("data") or {}
+            price = d.get("f43")
+            rate = d.get("f170")   # 涨跌幅，放大100倍
+            chg = d.get("f169")    # 涨跌额，放大100倍
+            if price is None or rate is None:
+                continue
+            out.append({
+                "name": name,
+                "point": round(price / 100, 2),      # 点位（东财放大100倍）
+                "rate": round(rate / 100, 2),        # 涨跌幅 %
+                "change": round((chg or 0) / 100, 2),  # 涨跌额
+            })
+            print(f"  指数 {name}: {round(price/100,2)} ({round(rate/100,2)}%)")
+        except Exception as e:
+            print(f"  指数 {name} 抓取失败：{str(e)[:60]}")
+    return out
 
 
 def main():
@@ -114,9 +154,13 @@ def main():
     order = {f["code"]: i for i, f in enumerate(funds)}
     results.sort(key=lambda x: order.get(x["code"], 1e9))
 
+    print("抓取美股核心指数...")
+    indices = fetch_indices()
+
     payload = {
         "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "count": len(results),
+        "indices": indices,
         "funds": results,
     }
     with open(OUT, "w", encoding="utf-8") as fp:
@@ -127,6 +171,28 @@ def main():
 
     inline_into_html(payload)
     sync_dist()
+    gen_card()
+
+
+def gen_card():
+    """抓数后生成营销卡片 dist/daily.png（依赖 Pillow，装在受管 venv）。
+    独立子进程调用，失败不影响主流程。"""
+    import subprocess, sys
+    base = os.path.dirname(os.path.abspath(__file__))
+    script = os.path.join(base, "gen_card.py")
+    if not os.path.exists(script):
+        return
+    # 优先受管 venv 的 python（带 Pillow），回退当前解释器
+    venv_py = r"C:/Users/liangqi/.workbuddy/binaries/python/envs/default/Scripts/python.exe"
+    py = venv_py if os.path.exists(venv_py) else sys.executable
+    try:
+        r = subprocess.run([py, script], capture_output=True, text=True, timeout=120)
+        if r.returncode == 0:
+            print("已生成营销卡片 dist/daily.png。")
+        else:
+            print("卡片生成失败（不影响数据/推送）：", (r.stderr or r.stdout)[:200])
+    except Exception as e:
+        print("卡片生成异常（不影响数据/推送）：", e)
 
 
 def sync_dist():
