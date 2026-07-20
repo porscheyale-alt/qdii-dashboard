@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>QDII 净值监控看板</title>
+<title>QDII 全球基金 · 每日净值看板</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 :root{
@@ -14,23 +14,38 @@
   --up-bg:#fdeceb;
   --down:#09a350;    /* 跌-绿 */
   --down-bg:#e8f7ef;
-  --bg:#eef1f6;
+  --bg:#eaeef5;
   --card:#ffffff;
-  --line:#e9ecf1;
-  --text:#1a1f28;
-  --sub:#8b929c;
+  --line:#e6eaf1;
+  --text:#131824;
+  --sub:#868d99;
   --brand:#2b5cff;
   --brand-2:#5b7dff;
-  --shadow:0 1px 3px rgba(20,30,60,.06),0 6px 20px rgba(20,30,60,.04);
-  --shadow-hover:0 4px 14px rgba(20,30,60,.10),0 12px 32px rgba(20,30,60,.07);
+  --brand-deep:#1e3a8a;
+  /* 蓝色渐变体系：高端质感的核心 */
+  --grad:linear-gradient(120deg,#1e3a8a 0%,#2b5cff 55%,#4f7bff 100%);
+  --grad-soft:linear-gradient(120deg,#3563ff 0%,#5b8bff 100%);
+  --grad-line:linear-gradient(180deg,#1e3a8a,#4f7bff);
+  --shadow:0 1px 2px rgba(20,30,60,.05),0 6px 18px rgba(20,30,60,.05);
+  --shadow-hover:0 6px 18px rgba(30,58,138,.12),0 16px 40px rgba(20,30,60,.10);
+  --shadow-brand:0 6px 18px rgba(43,92,255,.28);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-  background:var(--bg);color:var(--text);font-size:14px;-webkit-font-smoothing:antialiased}
-header{background:linear-gradient(120deg,#1e3a8a 0%,#2b5cff 55%,#4f7bff 100%);
-  padding:18px 24px;display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:20;box-shadow:0 2px 12px rgba(30,58,138,.18)}
-header h1{font-size:19px;font-weight:700;display:flex;align-items:center;gap:9px;color:#fff;letter-spacing:.3px}
+  background:
+    radial-gradient(1200px 480px at 15% -10%,rgba(43,92,255,.10),transparent 60%),
+    radial-gradient(1000px 440px at 100% 0,rgba(79,123,255,.08),transparent 55%),
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--text);font-size:14px;-webkit-font-smoothing:antialiased}
+header{background:var(--grad);
+  padding:18px 26px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:20;
+  box-shadow:0 4px 20px rgba(30,58,138,.28);position:sticky;overflow:hidden}
+header::after{content:"";position:absolute;right:-80px;top:-120px;width:360px;height:360px;
+  background:radial-gradient(circle,rgba(255,255,255,.16),transparent 62%);pointer-events:none}
+header h1{font-size:19px;font-weight:700;display:flex;align-items:center;gap:9px;color:#fff;
+  letter-spacing:.3px;position:relative;z-index:1;text-shadow:0 1px 2px rgba(0,0,0,.12)}
 header h1 .dot{width:10px;height:10px;border-radius:50%;background:#6ee7a8;
   box-shadow:0 0 0 4px rgba(110,231,168,.25);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
@@ -39,11 +54,58 @@ header h1 .dot{width:10px;height:10px;border-radius:50%;background:#6ee7a8;
 .meta b{color:#fff;font-weight:700;font-size:13px}
 .wrap{max-width:1240px;margin:0 auto;padding:22px 24px 60px}
 
+/* 对客介绍条：一眼说清「这是什么」 */
+.intro{background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:16px 20px;margin-bottom:18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.intro::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#1e3a8a,#4f7bff)}
+.intro h2{font-size:15px;font-weight:700;color:var(--text);margin-bottom:5px;letter-spacing:.2px}
+.intro .lead{color:var(--sub);font-size:12px;line-height:1.65;margin-bottom:12px}
+.intro .lead b{color:var(--text);font-weight:600}
+.intro .feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:9px}
+.intro .feat{display:flex;gap:9px;align-items:flex-start;background:#f7f9fc;
+  border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+.intro .feat .ic{flex:0 0 26px;height:26px;border-radius:7px;background:#eef3ff;color:var(--brand);
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.intro .feat .tx{font-size:11.5px;line-height:1.45}
+.intro .feat .tx b{display:block;color:var(--text);font-weight:600;font-size:12px;margin-bottom:1px}
+.intro .feat .tx span{color:var(--sub)}
+.intro .how{margin-top:11px;padding-top:11px;border-top:1px dashed var(--line);
+  color:var(--sub);font-size:11.5px;line-height:1.65}
+.intro .how b{color:var(--brand)}
+
+/* 区块小标题：让每个功能块身份清晰 */
+.sec-head{display:flex;align-items:center;gap:9px;margin:0 2px 12px}
+.sec-head .bar{width:4px;height:15px;border-radius:3px;background:var(--grad-line)}
+.sec-head .t{font-size:14px;font-weight:700;color:var(--text);letter-spacing:.3px}
+.sec-head .s{font-size:11.5px;color:var(--sub);font-weight:400}
+.block{margin-bottom:24px}
+
+/* 美股核心指数概览条：为 QDII 净值提供参照系 */
+.indices{display:flex;flex-wrap:wrap;gap:12px}
+.indices .ix{flex:1 1 150px;background:var(--card);border:1px solid var(--line);
+  border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+  transition:transform .15s,box-shadow .15s}
+.indices .ix::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--grad-line);opacity:.55}
+.indices .ix:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.indices .ix .nm{font-size:12px;color:var(--sub);margin-bottom:5px;display:flex;
+  align-items:center;gap:5px;font-weight:500}
+.indices .ix .nm::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--brand);opacity:.5}
+.indices .ix .pt{font-size:21px;font-weight:700;color:var(--text);letter-spacing:.3px;
+  font-variant-numeric:tabular-nums}
+.indices .ix .ch{font-size:12px;font-weight:600;margin-top:3px;font-variant-numeric:tabular-nums}
+.indices .ix.up .ch,.indices .ix.up .pt{color:var(--up)}
+.indices .ix.down .ch,.indices .ix.down .pt{color:var(--down)}
+.indices .ix .tip{position:absolute;right:14px;top:14px;font-size:10px;color:var(--sub);opacity:.6}
+
 /* 汇总卡片 */
-.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;margin-bottom:22px}
-.scard{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;
-  padding:16px 18px;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s;overflow:hidden}
-.scard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--brand);opacity:.65}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px}
+.scard{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:17px 19px;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s;overflow:hidden}
+.scard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--grad-line);opacity:.8}
+.scard::after{content:"";position:absolute;right:-30px;top:-30px;width:90px;height:90px;
+  background:radial-gradient(circle,rgba(43,92,255,.06),transparent 65%);pointer-events:none}
 .scard.c-up::before{background:var(--up)}
 .scard.c-down::before{background:var(--down)}
 .scard:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
@@ -59,8 +121,8 @@ header h1 .dot{width:10px;height:10px;border-radius:50%;background:#6ee7a8;
 .tab{padding:7px 15px;border-radius:8px;cursor:pointer;color:var(--sub);font-weight:500;
   transition:all .15s;white-space:nowrap}
 .tab:hover{color:var(--brand);background:#f2f5ff}
-.tab.active{background:var(--brand);color:#fff;box-shadow:0 2px 8px rgba(43,92,255,.3)}
-.tab.active:hover{background:var(--brand);color:#fff}
+.tab.active{background:var(--grad-soft);color:#fff;box-shadow:var(--shadow-brand)}
+.tab.active:hover{background:var(--grad-soft);color:#fff}
 .search{flex:1;min-width:180px;max-width:340px;position:relative}
 .search::before{content:"🔍";position:absolute;left:13px;top:50%;transform:translateY(-50%);
   font-size:13px;opacity:.5;pointer-events:none}
@@ -73,11 +135,12 @@ header h1 .dot{width:10px;height:10px;border-radius:50%;background:#6ee7a8;
 .toolbar-inline{display:flex;gap:8px;align-items:center;flex:1}
 
 /* 列表 */
-.tablewrap{background:var(--card);border:1px solid var(--line);border-radius:14px;
+.tablewrap{background:var(--card);border:1px solid var(--line);border-radius:16px;
   overflow:hidden;box-shadow:var(--shadow)}
 table{width:100%;border-collapse:collapse}
-thead th{background:#f7f9fc;text-align:left;padding:13px 14px;font-size:12px;color:var(--sub);
-  font-weight:600;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0}
+thead th{background:linear-gradient(180deg,#f4f7fd,#eef2fa);text-align:left;padding:14px 14px;
+  font-size:12px;color:#5a6472;font-weight:600;border-bottom:2px solid #e3e9f4;
+  white-space:nowrap;position:sticky;top:0;letter-spacing:.2px}
 tbody td{padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
 tbody tr:last-child td{border-bottom:none}
 tbody tr{cursor:pointer;transition:background .12s}
@@ -97,13 +160,15 @@ tbody tr:hover{background:#eef3ff}
 .pill.down{color:var(--down);background:var(--down-bg)}
 .pill.flat{color:var(--sub);background:#f0f1f4}
 /* 申购额度徽章：暂停=红 / 限大额=橙 / 开放=绿 / 未知=灰 */
-.quota{display:inline-block;font-size:11px;line-height:1.35;padding:3px 8px;border-radius:7px;
-  font-weight:600;max-width:150px;white-space:normal;text-align:center}
+.quota{display:inline-block;font-size:11px;line-height:1.35;padding:4px 10px;border-radius:7px;
+  font-weight:600;white-space:nowrap;text-align:center}
 .quota.q-open{color:#0aa34f;background:#e7f6ec}
 .quota.q-limit{color:#d97706;background:#fdf0dd}
 .quota.q-close{color:#e02d2d;background:#fcebeb}
 .quota.q-unknown{color:var(--sub);background:#f0f1f4}
-.col-quota{max-width:160px}
+.col-quota{min-width:150px;width:150px;text-align:center}
+.ch-tag{display:inline-block;margin-left:5px;padding:1px 6px;border-radius:6px;font-size:10px;
+  font-weight:600;color:#4f7bff;background:#eef3ff;vertical-align:middle;cursor:help}
 .spark{display:block}
 /* 自选星标 */
 .star{cursor:pointer;font-size:19px;line-height:1;color:#d3d6dc;user-select:none;
@@ -119,6 +184,13 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
   header{padding:14px 16px}
   header h1{font-size:16px}
   .wrap{padding:12px 10px 50px}
+  .block{margin-bottom:16px}
+  .sec-head{margin-bottom:9px}
+  .sec-head .t{font-size:13px}
+  .sec-head .s{display:none}
+  .indices{gap:8px}
+  .indices .ix{flex:1 1 44%;padding:11px 12px}
+  .indices .ix .pt{font-size:18px}
   .summary{grid-template-columns:repeat(2,1fr);gap:8px}
   .scard{padding:11px 12px}
   .scard .val{font-size:19px}
@@ -166,38 +238,64 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
 .navlist th,.navlist td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right}
 .navlist th:first-child,.navlist td:first-child{text-align:left}
 .footnote{color:var(--sub);font-size:12px;margin-top:24px;line-height:1.7}
+.risk{color:var(--sub);font-size:12px;margin-top:14px;padding:16px 18px;
+  background:linear-gradient(180deg,#fbfcfe,#f6f8fc);border:1px solid var(--line);
+  border-radius:12px;line-height:1.8}
+.risk b{color:#c0392b;font-weight:600}
 .empty{text-align:center;color:var(--sub);padding:40px}
 </style>
 </head>
 <body>
 <header>
-  <h1><span class="dot"></span>QDII 净值监控看板</h1>
+  <h1><span class="dot"></span>QDII 全球基金 · 每日净值</h1>
   <div class="meta" id="metaInfo">加载中...</div>
 </header>
 <div class="wrap">
-  <div class="summary" id="summary"></div>
-  <div class="toolbar">
-    <div class="tabs" id="tabs"></div>
-    <div class="toolbar-inline">
-      <div class="search"><input id="searchInput" placeholder="搜索基金名称 / 代码"></div>
-      <select class="sortsel" id="sortSel">
-      <option value="rate_desc">按今日涨幅↓</option>
-      <option value="rate_asc">按今日涨幅↑</option>
-      <option value="name">按名称</option>
-    </select>
+  <div class="intro">
+    <h2>QDII 全球基金 · 每日净值看板</h2>
+    <div class="lead">一个集中查看 <b>QDII 全球基金</b>每日净值的看板。覆盖<b>美股主动基、纳斯达克100、标普500</b>及<b>科技成长</b>等主题，数据每日自动更新，一屏掌握涨跌与走势。</div>
+    <div class="feats">
+      <div class="feat"><div class="ic">全</div><div class="tx"><b>覆盖全面</b><span>百余只 QDII 基金，分组归类</span></div></div>
+      <div class="feat"><div class="ic">新</div><div class="tx"><b>每日更新</b><span>自动抓取公开净值，涨红跌绿</span></div></div>
+      <div class="feat"><div class="ic">势</div><div class="tx"><b>走势可查</b><span>点任意一行看近30日净值走势</span></div></div>
+      <div class="feat"><div class="ic">选</div><div class="tx"><b>分组自选</b><span>顶部切换分组，★收藏常看基金</span></div></div>
     </div>
+    <div class="how">用法：顶部<b>分组标签</b>切换方向 · <b>搜索框</b>按名称/代码查找 · 点击<b>任意一行</b>展开走势图与历史净值明细。数据来源天天基金公开接口，单位净值 T+1/T+2 公布，非实时行情。</div>
   </div>
-  <div class="tablewrap">
+  <div class="block" id="indicesBlock">
+    <div class="sec-head"><span class="bar"></span><span class="t">美股核心指数</span><span class="s">为 QDII 净值涨跌提供参照系</span></div>
+    <div class="indices" id="indices"></div>
+  </div>
+  <div class="block">
+    <div class="sec-head"><span class="bar"></span><span class="t">整体概览</span><span class="s">当日净值汇总</span></div>
+    <div class="summary" id="summary"></div>
+  </div>
+  <div class="block">
+    <div class="sec-head"><span class="bar"></span><span class="t">基金明细</span><span class="s">点击任意一行查看走势与历史净值</span></div>
+    <div class="toolbar">
+      <div class="tabs" id="tabs"></div>
+      <div class="toolbar-inline">
+        <div class="search"><input id="searchInput" placeholder="搜索基金名称 / 代码"></div>
+        <select class="sortsel" id="sortSel">
+        <option value="rate_desc">按今日涨幅↓</option>
+        <option value="rate_asc">按今日涨幅↑</option>
+        <option value="name">按名称</option>
+      </select>
+      </div>
+    </div>
+    <div class="tablewrap">
     <table>
       <thead><tr>
         <th class="star-col">★</th>
         <th>基金名称</th><th class="col-group">分组</th><th class="num">最新净值</th>
-        <th class="num">今日涨跌</th><th class="col-quota">申购额度</th><th class="col-spark">近期走势</th><th class="num col-date">净值日期</th>
+        <th class="num">今日涨跌</th><th class="col-quota" title="额度为天天基金代销口径，非基金公司直销额度，仅供参考">申购额度<span class="ch-tag">代销</span></th><th class="col-spark">近期走势</th><th class="num col-date">净值日期</th>
       </tr></thead>
       <tbody id="tbody"></tbody>
     </table>
+    </div>
   </div>
   <div class="footnote" id="foot"></div>
+  <div class="risk"><b>风险提示：</b>投资有风险，投资需谨慎。基金管理人承诺以诚实信用、勤勉尽责的原则管理和运用基金资产，但不保证本基金一定盈利，也不保证最低收益。本基金的过往业绩及其净值高低并不预示其未来业绩表现，基金管理人管理的其他基金的业绩并不构成对本基金业绩表现的保证。基金管理人/基金销售机构提醒您基金投资的"买者自负"原则，在做出投资决策后，基金运营状况与基金净值变化引致的投资风险，由您自行负担。基金管理人、基金托管人、基金销售机构及相关机构不对基金投资收益做出任何承诺或保证。您在做出投资决策之前，请仔细阅读基金合同、基金招募说明书和基金产品资料概要等产品法律文件和风险揭示书，充分认识本基金的风险收益特征和产品特性，认真考虑本基金存在的各项风险因素，并根据自身的投资目的、投资期限、投资经验、资产状况等因素充分考虑自身的风险承受能力，在了解产品情况及销售适当性意见的基础上，理性判断并谨慎做出投资决策。</div>
 </div>
 
 <div class="mask" id="mask"></div>
@@ -213,8 +311,28 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
 </div>
 
 <script id="fundData" type="application/json">{
-  "updated_at": "2026-07-20 11:01:44",
+  "updated_at": "2026-07-20 15:55:47",
   "count": 127,
+  "indices": [
+    {
+      "name": "纳斯达克",
+      "point": 25520.24,
+      "rate": -1.4,
+      "change": -361.71
+    },
+    {
+      "name": "标普500",
+      "point": 7457.69,
+      "rate": -1.01,
+      "change": -76.08
+    },
+    {
+      "name": "道琼斯",
+      "point": 52146.42,
+      "rate": -0.77,
+      "change": -406.55
+    }
+  ],
   "funds": [
     {
       "code": "012920",
@@ -1933,15 +2051,10 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
       "tags": [
         "科技成长"
       ],
-      "latest_date": "2026-07-16",
-      "latest_nav": 1.8139,
-      "latest_rate": -4.18,
+      "latest_date": "2026-07-17",
+      "latest_nav": 1.782,
+      "latest_rate": -1.76,
       "history": [
-        {
-          "date": "2026-06-18",
-          "nav": 2.2656,
-          "rate": 5.7
-        },
         {
           "date": "2026-06-22",
           "nav": 2.3286,
@@ -2036,6 +2149,11 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "date": "2026-07-16",
           "nav": 1.8139,
           "rate": -4.18
+        },
+        {
+          "date": "2026-07-17",
+          "nav": 1.782,
+          "rate": -1.76
         }
       ],
       "quota": "限大额(单日投资上限200元)"
@@ -2047,15 +2165,10 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
       "tags": [
         "科技成长"
       ],
-      "latest_date": "2026-07-16",
-      "latest_nav": 1.7667,
-      "latest_rate": -4.18,
+      "latest_date": "2026-07-17",
+      "latest_nav": 1.7356,
+      "latest_rate": -1.76,
       "history": [
-        {
-          "date": "2026-06-18",
-          "nav": 2.2073,
-          "rate": 5.7
-        },
         {
           "date": "2026-06-22",
           "nav": 2.2685,
@@ -2150,6 +2263,11 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "date": "2026-07-16",
           "nav": 1.7667,
           "rate": -4.18
+        },
+        {
+          "date": "2026-07-17",
+          "nav": 1.7356,
+          "rate": -1.76
         }
       ],
       "quota": "限大额(单日投资上限200元)"
@@ -3181,15 +3299,10 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
       "tags": [
         "科技成长"
       ],
-      "latest_date": "2026-07-16",
-      "latest_nav": 2.2382,
-      "latest_rate": -2.86,
+      "latest_date": "2026-07-17",
+      "latest_nav": 2.2038,
+      "latest_rate": -1.54,
       "history": [
-        {
-          "date": "2026-06-18",
-          "nav": 2.4067,
-          "rate": 2.43
-        },
         {
           "date": "2026-06-22",
           "nav": 2.3963,
@@ -3284,6 +3397,11 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "date": "2026-07-16",
           "nav": 2.2382,
           "rate": -2.86
+        },
+        {
+          "date": "2026-07-17",
+          "nav": 2.2038,
+          "rate": -1.54
         }
       ],
       "quota": "限大额(单日投资上限20元)"
@@ -3295,15 +3413,10 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
       "tags": [
         "科技成长"
       ],
-      "latest_date": "2026-07-16",
-      "latest_nav": 2.219,
-      "latest_rate": -2.85,
+      "latest_date": "2026-07-17",
+      "latest_nav": 2.1848,
+      "latest_rate": -1.54,
       "history": [
-        {
-          "date": "2026-06-18",
-          "nav": 2.3866,
-          "rate": 2.43
-        },
         {
           "date": "2026-06-22",
           "nav": 2.3762,
@@ -3398,6 +3511,11 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "date": "2026-07-16",
           "nav": 2.219,
           "rate": -2.85
+        },
+        {
+          "date": "2026-07-17",
+          "nav": 2.1848,
+          "rate": -1.54
         }
       ],
       "quota": "限大额(单日投资上限20元)"
@@ -3409,15 +3527,10 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
       "tags": [
         "科技成长"
       ],
-      "latest_date": "2026-07-16",
-      "latest_nav": 2.2365,
-      "latest_rate": -2.33,
+      "latest_date": "2026-07-17",
+      "latest_nav": 2.1994,
+      "latest_rate": -1.66,
       "history": [
-        {
-          "date": "2026-06-18",
-          "nav": 2.4047,
-          "rate": 2.94
-        },
         {
           "date": "2026-06-22",
           "nav": 2.3814,
@@ -3512,6 +3625,11 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "date": "2026-07-16",
           "nav": 2.2365,
           "rate": -2.33
+        },
+        {
+          "date": "2026-07-17",
+          "nav": 2.1994,
+          "rate": -1.66
         }
       ],
       "quota": "限大额(单日投资上限1000元)"
@@ -3523,15 +3641,10 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
       "tags": [
         "科技成长"
       ],
-      "latest_date": "2026-07-16",
-      "latest_nav": 2.2084,
-      "latest_rate": -2.34,
+      "latest_date": "2026-07-17",
+      "latest_nav": 2.1717,
+      "latest_rate": -1.66,
       "history": [
-        {
-          "date": "2026-06-18",
-          "nav": 2.3752,
-          "rate": 2.94
-        },
         {
           "date": "2026-06-22",
           "nav": 2.352,
@@ -3626,6 +3739,11 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "date": "2026-07-16",
           "nav": 2.2084,
           "rate": -2.34
+        },
+        {
+          "date": "2026-07-17",
+          "nav": 2.1717,
+          "rate": -1.66
         }
       ],
       "quota": "限大额(单日投资上限1000元)"
@@ -6871,7 +6989,7 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -4.61
         }
       ],
-      "quota": "暂停申购(单日投资上限500元)"
+      "quota": "限大额(单日投资上限500元)"
     },
     {
       "code": "017654",
@@ -6982,21 +7100,16 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -4.61
         }
       ],
-      "quota": "暂停申购(单日投资上限500元)"
+      "quota": "限大额(单日投资上限500元)"
     },
     {
       "code": "005534",
       "name": "华夏新时代灵活配置混合(QDII)",
       "group": "美股主动基",
-      "latest_date": "2026-07-16",
-      "latest_nav": 2.3351,
-      "latest_rate": -3.67,
+      "latest_date": "2026-07-17",
+      "latest_nav": 2.1749,
+      "latest_rate": -6.86,
       "history": [
-        {
-          "date": "2026-06-18",
-          "nav": 2.9459,
-          "rate": 4.84
-        },
         {
           "date": "2026-06-22",
           "nav": 3.0597,
@@ -7091,6 +7204,11 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "date": "2026-07-16",
           "nav": 2.3351,
           "rate": -3.67
+        },
+        {
+          "date": "2026-07-17",
+          "nav": 2.1749,
+          "rate": -6.86
         }
       ],
       "quota": "限大额(单日投资上限50000元)"
@@ -8203,7 +8321,7 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.63
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota": "限大额(单日投资上限5元)"
     },
     {
       "code": "006479",
@@ -8314,7 +8432,7 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.63
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota": "限大额(单日投资上限5元)"
     },
     {
       "code": "021778",
@@ -10651,15 +10769,10 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
       "code": "015299",
       "name": "华夏纳斯达克 100 (QDII) A",
       "group": "纳斯达克100",
-      "latest_date": "2026-07-16",
-      "latest_nav": 2.0129,
-      "latest_rate": -1.56,
+      "latest_date": "2026-07-17",
+      "latest_nav": 1.9868,
+      "latest_rate": -1.3,
       "history": [
-        {
-          "date": "2026-06-18",
-          "nav": 2.1013,
-          "rate": 2.41
-        },
         {
           "date": "2026-06-22",
           "nav": 2.1022,
@@ -10754,6 +10867,11 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "date": "2026-07-16",
           "nav": 2.0129,
           "rate": -1.56
+        },
+        {
+          "date": "2026-07-17",
+          "nav": 1.9868,
+          "rate": -1.3
         }
       ],
       "quota": "暂停申购(单日投资上限100元)"
@@ -10762,15 +10880,10 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
       "code": "015300",
       "name": "华夏纳斯达克 100 (QDII) C",
       "group": "纳斯达克100",
-      "latest_date": "2026-07-16",
-      "latest_nav": 1.9874,
-      "latest_rate": -1.57,
+      "latest_date": "2026-07-17",
+      "latest_nav": 1.9616,
+      "latest_rate": -1.3,
       "history": [
-        {
-          "date": "2026-06-18",
-          "nav": 2.0752,
-          "rate": 2.41
-        },
         {
           "date": "2026-06-22",
           "nav": 2.076,
@@ -10865,6 +10978,11 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "date": "2026-07-16",
           "nav": 1.9874,
           "rate": -1.57
+        },
+        {
+          "date": "2026-07-17",
+          "nav": 1.9616,
+          "rate": -1.3
         }
       ],
       "quota": "暂停申购(单日投资上限100元)"
