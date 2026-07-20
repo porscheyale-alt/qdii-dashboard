@@ -69,8 +69,8 @@
     document.getElementById("foot").innerHTML =
       "说明：净值来源于公开数据（天天基金），QDII 单位净值通常 T+1（部分 T+2）公布，非实时行情。"+
       "颜色遵循 A 股习惯：<span class='up'>涨为红</span> / <span class='down'>跌为绿</span>。"+
-      "申购额度：<span class='quota q-open'>开放</span> / <span class='quota q-limit'>限大额</span> / <span class='quota q-close'>暂停</span>，随净值同步更新。"+
-      "<b>申购额度为公开平台数据</b>，实际能否买入、最多能买多少，以你使用的购买渠道显示为准，本表仅供参考。"+
+      "申购额度分两列：<span class='quota q-open'>开放</span> / <span class='quota q-limit'>限大额</span> / <span class='quota q-close'>暂停</span>。"+
+      "<b>第三方购买</b>为代销平台(天天基金)口径，每日自动更新；<b>直销购买</b>请以基金公司官方渠道(官网/APP)为准，本表暂以「以官方为准」占位。实际能否买入、最多买多少以你购买渠道显示为准，本表仅供参考。"+
       "点击任意一行查看近 30 日净值走势。";
     bindEvents();
     bindResizeOnce();
@@ -200,14 +200,16 @@
       const r = fmtRate(f.latest_rate);
       const on = isFav(f.code);
       const pillCls = r.c===UP?"up":(r.c===DOWN?"down":"flat");
-      const q = fmtQuota(f.quota);
+      const qd = fmtQuota(f.quota_direct);
+      const qt = fmtQuota(f.quota_third);
       return `<tr data-code="${f.code}">
         <td class="star-col"><span class="star ${on?'on':''}" data-fav="${f.code}" title="${on?'取消自选':'加入自选'}">${on?'★':'☆'}</span></td>
         <td class="fname">${f.name}<div class="code">${f.code}</div></td>
         <td class="col-group"><span class="grp-tag">${f.group}</span></td>
         <td class="num">${f.latest_nav.toFixed(4)}</td>
         <td class="num"><span class="pill ${pillCls}">${r.t}</span></td>
-        <td class="col-quota"><span class="quota ${q.cls}">${q.t}</span></td>
+        <td class="col-direct"><span class="quota ${qd.cls}">${qd.t}</span></td>
+        <td class="col-third"><span class="quota ${qt.cls}">${qt.t}</span></td>
         <td class="col-spark"><canvas class="spark" id="sp_${f.code}" width="${spW}" height="${spH}"></canvas></td>
         <td class="num code col-date">${f.latest_date}</td>
       </tr>`;

@@ -97,9 +97,13 @@ def process_one(f):
         f2["latest_nav"] = latest["nav"]
         f2["latest_rate"] = latest["rate"]
         f2["history"] = hist
-        f2["quota"] = fetch_quota(f["code"])  # 申购额度/状态
-        if f["code"] in QUOTA_OVERRIDE and f2["quota"]:
-            f2["quota"] = QUOTA_OVERRIDE[f["code"]]
+        # 第三方(代销)额度：来自天天基金 SGZT 接口(代销平台口径)，每日自动更新
+        third = fetch_quota(f["code"])
+        if f["code"] in QUOTA_OVERRIDE and third:
+            third = QUOTA_OVERRIDE[f["code"]]
+        f2["quota_third"] = third
+        # 直销额度：无公开接口(需从基金公司公告人工复核)，此处先占位
+        f2["quota_direct"] = None
         return f["code"], f2
     except Exception as e:
         return f["code"], ("ERR", str(e))
@@ -156,7 +160,7 @@ def main():
                 results.append(res)
                 print(f"[{done}/{total}] {code} {res['name'][:16]} "
                       f"净值{res['latest_nav']} 涨跌{res['latest_rate']}% "
-                      f"额度[{res.get('quota') or '--'}]")
+                      f"第三方额度[{res.get('quota_third') or '--'}]")
 
     # 保持稳定顺序（并发返回顺序与 funds 一致，此处按原始列表再排一次以防万一）
     order = {f["code"]: i for i, f in enumerate(funds)}

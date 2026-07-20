@@ -149,7 +149,7 @@ header h1 .dot{width:10px;height:10px;border-radius:50%;background:#ff9585;
 .toolbar-inline{display:flex;gap:8px;align-items:center;flex:1}
 
 /* 列表 */
-.tablewrap{background:var(--card);border:1px solid var(--line);border-radius:16px;
+.tablewrap{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;
   overflow:hidden;box-shadow:var(--shadow)}
 table{width:100%;border-collapse:collapse}
 thead th{background:linear-gradient(180deg,#fff5f5,#fdeee9);text-align:left;padding:14px 14px;
@@ -180,7 +180,7 @@ tbody tr:hover{background:#fff5f5}
 .quota.q-limit{color:#d97706;background:#fdf0dd}
 .quota.q-close{color:#e02d2d;background:#fcebeb}
 .quota.q-unknown{color:var(--sub);background:#f0f1f4}
-.col-quota{min-width:150px;width:150px;text-align:center}
+.col-direct,.col-third{min-width:128px;width:128px;text-align:center}
 .ch-tag{display:inline-block;margin-left:5px;padding:1px 6px;border-radius:6px;font-size:10px;
   font-weight:600;color:#e85a54;background:#ffe5e3;vertical-align:middle;cursor:help}
 .spark{display:block}
@@ -308,7 +308,7 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
       <thead><tr>
         <th class="star-col">★</th>
         <th>基金名称</th><th class="col-group">分组</th><th class="num">最新净值</th>
-        <th class="num">今日涨跌</th><th class="col-quota" title="额度为公开平台数据，实际能否买入、最多买多少以你使用的购买渠道为准，仅供参考">申购额度</th><th class="col-spark">近期走势</th><th class="num col-date">净值日期</th>
+        <th class="num">今日涨跌</th><th class="col-direct" title="直销购买：请以基金公司官方渠道(官网/APP)为准，本表暂以「以官方为准」占位">直销购买</th><th class="col-third" title="第三方购买：代销平台(天天基金)口径，每日自动更新，实际能否买入以你使用的购买渠道显示为准">第三方购买</th><th class="col-spark">近期走势</th><th class="num col-date">净值日期</th>
       </tr></thead>
       <tbody id="tbody"></tbody>
     </table>
@@ -331,7 +331,7 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
 </div>
 
 <script id="fundData" type="application/json">{
-  "updated_at": "2026-07-20 19:37:28",
+  "updated_at": "2026-07-20 19:44:25",
   "count": 127,
   "indices": [],
   "funds": [
@@ -447,7 +447,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -5.4
         }
       ],
-      "quota": "暂停申购(单日投资上限10元)"
+      "quota_third": "暂停申购(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "012922",
@@ -561,7 +562,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -5.4
         }
       ],
-      "quota": "暂停申购(单日投资上限10元)"
+      "quota_third": "暂停申购(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "016664",
@@ -675,7 +677,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -8.08
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "016665",
@@ -789,7 +792,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -8.08
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "017730",
@@ -903,7 +907,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -5.99
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "017731",
@@ -1017,7 +1022,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -5.99
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "539002",
@@ -1131,7 +1137,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.78
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "018147",
@@ -1245,7 +1252,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.76
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "006373",
@@ -1359,7 +1367,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -4.75
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "021842",
@@ -1473,7 +1482,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -4.75
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "002891",
@@ -1587,7 +1597,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -3.61
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "005698",
@@ -1701,7 +1712,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -5.88
         }
       ],
-      "quota": "限大额(单日投资上限2000元)"
+      "quota_third": "限大额(单日投资上限2000元)",
+      "quota_direct": null
     },
     {
       "code": "024239",
@@ -1815,7 +1827,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -5.88
         }
       ],
-      "quota": "限大额(单日投资上限2000元)"
+      "quota_third": "限大额(单日投资上限2000元)",
+      "quota_direct": null
     },
     {
       "code": "006555",
@@ -1929,7 +1942,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -2.33
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "014002",
@@ -2043,7 +2057,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -2.33
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "008253",
@@ -2157,7 +2172,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.76
         }
       ],
-      "quota": "限大额(单日投资上限200元)"
+      "quota_third": "限大额(单日投资上限200元)",
+      "quota_direct": null
     },
     {
       "code": "008254",
@@ -2271,7 +2287,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.76
         }
       ],
-      "quota": "限大额(单日投资上限200元)"
+      "quota_third": "限大额(单日投资上限200元)",
+      "quota_direct": null
     },
     {
       "code": "501225",
@@ -2382,7 +2399,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -2.84
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "016668",
@@ -2493,7 +2511,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -2.84
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "501226",
@@ -2607,7 +2626,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.76
         }
       ],
-      "quota": "限大额(单日投资上限1000元)"
+      "quota_third": "限大额(单日投资上限1000元)",
+      "quota_direct": null
     },
     {
       "code": "018036",
@@ -2721,7 +2741,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.76
         }
       ],
-      "quota": "限大额(单日投资上限1000元)"
+      "quota_third": "限大额(单日投资上限1000元)",
+      "quota_direct": null
     },
     {
       "code": "270023",
@@ -2835,7 +2856,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -4.1
         }
       ],
-      "quota": "限大额(单日投资上限200元)"
+      "quota_third": "限大额(单日投资上限200元)",
+      "quota_direct": null
     },
     {
       "code": "021277",
@@ -2949,7 +2971,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -4.11
         }
       ],
-      "quota": "限大额(单日投资上限200元)"
+      "quota_third": "限大额(单日投资上限200元)",
+      "quota_direct": null
     },
     {
       "code": "000043",
@@ -3063,7 +3086,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.02
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "016701",
@@ -3177,7 +3201,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.4
         }
       ],
-      "quota": "限大额(单日投资上限1000元)"
+      "quota_third": "限大额(单日投资上限1000元)",
+      "quota_direct": null
     },
     {
       "code": "016702",
@@ -3291,7 +3316,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.4
         }
       ],
-      "quota": "限大额(单日投资上限1000元)"
+      "quota_third": "限大额(单日投资上限1000元)",
+      "quota_direct": null
     },
     {
       "code": "501312",
@@ -3405,7 +3431,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.54
         }
       ],
-      "quota": "限大额(单日投资上限20元)"
+      "quota_third": "限大额(单日投资上限20元)",
+      "quota_direct": null
     },
     {
       "code": "017204",
@@ -3519,7 +3546,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.54
         }
       ],
-      "quota": "限大额(单日投资上限20元)"
+      "quota_third": "限大额(单日投资上限20元)",
+      "quota_direct": null
     },
     {
       "code": "017436",
@@ -3633,7 +3661,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.66
         }
       ],
-      "quota": "限大额(单日投资上限1000元)"
+      "quota_third": "限大额(单日投资上限1000元)",
+      "quota_direct": null
     },
     {
       "code": "017437",
@@ -3747,7 +3776,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.66
         }
       ],
-      "quota": "限大额(单日投资上限1000元)"
+      "quota_third": "限大额(单日投资上限1000元)",
+      "quota_direct": null
     },
     {
       "code": "457001",
@@ -3861,7 +3891,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -2.26
         }
       ],
-      "quota": "限大额(单日投资上限200元)"
+      "quota_third": "限大额(单日投资上限200元)",
+      "quota_direct": null
     },
     {
       "code": "021662",
@@ -3975,7 +4006,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -2.26
         }
       ],
-      "quota": "限大额(单日投资上限200元)"
+      "quota_third": "限大额(单日投资上限200元)",
+      "quota_direct": null
     },
     {
       "code": "019454",
@@ -4086,7 +4118,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -3.16
         }
       ],
-      "quota": "暂停申购(单日投资上限10元)"
+      "quota_third": "暂停申购(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "019455",
@@ -4197,7 +4230,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -3.16
         }
       ],
-      "quota": "暂停申购(单日投资上限10元)"
+      "quota_third": "暂停申购(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "022681",
@@ -4308,7 +4342,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -3.16
         }
       ],
-      "quota": "暂停申购(单日投资上限10元)"
+      "quota_third": "暂停申购(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "378006",
@@ -4419,7 +4454,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.2
         }
       ],
-      "quota": "限大额(单日投资上限1000元)"
+      "quota_third": "限大额(单日投资上限1000元)",
+      "quota_direct": null
     },
     {
       "code": "019155",
@@ -4530,7 +4566,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -6.39
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "019156",
@@ -4641,7 +4678,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -6.39
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "018229",
@@ -4752,7 +4790,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -4.22
         }
       ],
-      "quota": "限大额(单日投资上限1000元)"
+      "quota_third": "限大额(单日投资上限1000元)",
+      "quota_direct": null
     },
     {
       "code": "018230",
@@ -4863,7 +4902,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -4.23
         }
       ],
-      "quota": "限大额(单日投资上限1000元)"
+      "quota_third": "限大额(单日投资上限1000元)",
+      "quota_direct": null
     },
     {
       "code": "012060",
@@ -4974,7 +5014,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -2.36
         }
       ],
-      "quota": "开放申购"
+      "quota_third": "开放申购",
+      "quota_direct": null
     },
     {
       "code": "012062",
@@ -5085,7 +5126,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -2.36
         }
       ],
-      "quota": "开放申购"
+      "quota_third": "开放申购",
+      "quota_direct": null
     },
     {
       "code": "100055",
@@ -5199,7 +5241,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -3.97
         }
       ],
-      "quota": "限大额(单日投资上限1000元)"
+      "quota_third": "限大额(单日投资上限1000元)",
+      "quota_direct": null
     },
     {
       "code": "022184",
@@ -5313,7 +5356,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -3.98
         }
       ],
-      "quota": "限大额(单日投资上限1000元)"
+      "quota_third": "限大额(单日投资上限1000元)",
+      "quota_direct": null
     },
     {
       "code": "001668",
@@ -5427,7 +5471,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.6
         }
       ],
-      "quota": "限大额(单日投资上限700元)"
+      "quota_third": "限大额(单日投资上限700元)",
+      "quota_direct": null
     },
     {
       "code": "015202",
@@ -5541,7 +5586,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.6
         }
       ],
-      "quota": "限大额(单日投资上限700元)"
+      "quota_third": "限大额(单日投资上限700元)",
+      "quota_direct": null
     },
     {
       "code": "016199",
@@ -5652,7 +5698,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.96
         }
       ],
-      "quota": "限大额(单日投资上限10万元)"
+      "quota_third": "限大额(单日投资上限10万元)",
+      "quota_direct": null
     },
     {
       "code": "016202",
@@ -5763,7 +5810,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.96
         }
       ],
-      "quota": "限大额(单日投资上限10万元)"
+      "quota_third": "限大额(单日投资上限10万元)",
+      "quota_direct": null
     },
     {
       "code": "017145",
@@ -5877,7 +5925,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.32
         }
       ],
-      "quota": "限大额(单日投资上限10000元)"
+      "quota_third": "限大额(单日投资上限10000元)",
+      "quota_direct": null
     },
     {
       "code": "017144",
@@ -5991,7 +6040,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.32
         }
       ],
-      "quota": "限大额(单日投资上限10000元)"
+      "quota_third": "限大额(单日投资上限10000元)",
+      "quota_direct": null
     },
     {
       "code": "164212",
@@ -6102,7 +6152,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -5.48
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "016823",
@@ -6213,7 +6264,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -5.47
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "017071",
@@ -6324,7 +6376,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.66
         }
       ],
-      "quota": "开放申购"
+      "quota_third": "开放申购",
+      "quota_direct": null
     },
     {
       "code": "017072",
@@ -6435,7 +6488,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.66
         }
       ],
-      "quota": "开放申购"
+      "quota_third": "开放申购",
+      "quota_direct": null
     },
     {
       "code": "015204",
@@ -6546,7 +6600,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.95
         }
       ],
-      "quota": "开放申购"
+      "quota_third": "开放申购",
+      "quota_direct": null
     },
     {
       "code": "015205",
@@ -6657,7 +6712,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.95
         }
       ],
-      "quota": "开放申购"
+      "quota_third": "开放申购",
+      "quota_direct": null
     },
     {
       "code": "009225",
@@ -6768,7 +6824,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -2.84
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "009226",
@@ -6879,7 +6936,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -2.84
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "017653",
@@ -6990,7 +7048,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -3.14
         }
       ],
-      "quota": "限大额(单日投资上限500元)"
+      "quota_third": "限大额(单日投资上限500元)",
+      "quota_direct": null
     },
     {
       "code": "017654",
@@ -7101,7 +7160,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -3.14
         }
       ],
-      "quota": "限大额(单日投资上限500元)"
+      "quota_third": "限大额(单日投资上限500元)",
+      "quota_direct": null
     },
     {
       "code": "005534",
@@ -7212,7 +7272,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -6.86
         }
       ],
-      "quota": "限大额(单日投资上限50000元)"
+      "quota_third": "限大额(单日投资上限50000元)",
+      "quota_direct": null
     },
     {
       "code": "160644",
@@ -7323,7 +7384,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -5.59
         }
       ],
-      "quota": "暂停申购(单日投资上限10000元)"
+      "quota_third": "暂停申购(单日投资上限10000元)",
+      "quota_direct": null
     },
     {
       "code": "002230",
@@ -7434,7 +7496,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -7.72
         }
       ],
-      "quota": "限大额(单日投资上限10万元)"
+      "quota_third": "限大额(单日投资上限10万元)",
+      "quota_direct": null
     },
     {
       "code": "000218",
@@ -7545,7 +7608,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.58
         }
       ],
-      "quota": "开放申购"
+      "quota_third": "开放申购",
+      "quota_direct": null
     },
     {
       "code": "020411",
@@ -7656,7 +7720,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": 1.71
         }
       ],
-      "quota": "开放申购"
+      "quota_third": "开放申购",
+      "quota_direct": null
     },
     {
       "code": "001302",
@@ -7767,7 +7832,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -5.21
         }
       ],
-      "quota": "开放申购"
+      "quota_third": "开放申购",
+      "quota_direct": null
     },
     {
       "code": "000834",
@@ -7878,7 +7944,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.47
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "008971",
@@ -7989,7 +8056,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.47
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "040046",
@@ -8100,7 +8168,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.46
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "014978",
@@ -8211,7 +8280,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.46
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "270042",
@@ -8322,7 +8392,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.48
         }
       ],
-      "quota": "限大额(单日投资上限5元)"
+      "quota_third": "限大额(单日投资上限5元)",
+      "quota_direct": null
     },
     {
       "code": "006479",
@@ -8433,7 +8504,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.48
         }
       ],
-      "quota": "限大额(单日投资上限5元)"
+      "quota_third": "限大额(单日投资上限5元)",
+      "quota_direct": null
     },
     {
       "code": "021778",
@@ -8544,7 +8616,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.48
         }
       ],
-      "quota": "限大额"
+      "quota_third": "限大额",
+      "quota_direct": null
     },
     {
       "code": "016452",
@@ -8655,7 +8728,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.38
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "016453",
@@ -8766,7 +8840,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.37
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "021000",
@@ -8877,7 +8952,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.37
         }
       ],
-      "quota": "限大额"
+      "quota_third": "限大额",
+      "quota_direct": null
     },
     {
       "code": "019524",
@@ -8988,7 +9064,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.38
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "019525",
@@ -9099,7 +9176,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.39
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "022664",
@@ -9210,7 +9288,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.38
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "019736",
@@ -9321,7 +9400,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.53
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "019737",
@@ -9432,7 +9512,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.52
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "019547",
@@ -9543,7 +9624,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.38
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "019548",
@@ -9654,7 +9736,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.38
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "018966",
@@ -9765,7 +9848,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.39
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "018967",
@@ -9876,7 +9960,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.39
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "021773",
@@ -9987,7 +10072,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.39
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "019441",
@@ -10098,7 +10184,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.53
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "019442",
@@ -10209,7 +10296,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.53
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "012752",
@@ -10320,7 +10408,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.23
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "023422",
@@ -10431,7 +10520,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.23
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "539001",
@@ -10542,7 +10632,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.23
         }
       ],
-      "quota": "限大额(单日投资上限100元)"
+      "quota_third": "限大额(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "019172",
@@ -10653,7 +10744,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.33
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "019173",
@@ -10764,7 +10856,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.34
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "015299",
@@ -10875,7 +10968,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.3
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "015300",
@@ -10986,7 +11080,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.3
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "016055",
@@ -11097,7 +11192,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.54
         }
       ],
-      "quota": "暂停申购"
+      "quota_third": "暂停申购",
+      "quota_direct": null
     },
     {
       "code": "016057",
@@ -11208,7 +11304,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.54
         }
       ],
-      "quota": "暂停申购"
+      "quota_third": "暂停申购",
+      "quota_direct": null
     },
     {
       "code": "024237",
@@ -11319,7 +11416,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.54
         }
       ],
-      "quota": "暂停申购"
+      "quota_third": "暂停申购",
+      "quota_direct": null
     },
     {
       "code": "016532",
@@ -11430,7 +11528,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.39
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "016533",
@@ -11541,7 +11640,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.39
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "021838",
@@ -11652,7 +11752,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.39
         }
       ],
-      "quota": "暂停申购"
+      "quota_third": "暂停申购",
+      "quota_direct": null
     },
     {
       "code": "160213",
@@ -11763,7 +11864,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.6
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "018043",
@@ -11874,7 +11976,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.39
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "018044",
@@ -11985,7 +12088,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.39
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "022525",
@@ -12096,7 +12200,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.39
         }
       ],
-      "quota": "暂停申购"
+      "quota_third": "暂停申购",
+      "quota_direct": null
     },
     {
       "code": "012870",
@@ -12207,7 +12312,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.39
         }
       ],
-      "quota": "暂停申购(单日投资上限10元)"
+      "quota_third": "暂停申购(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "161130",
@@ -12318,7 +12424,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.39
         }
       ],
-      "quota": "暂停申购(单日投资上限10元)"
+      "quota_third": "暂停申购(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "018738",
@@ -12429,7 +12536,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.93
         }
       ],
-      "quota": "限大额(单日上限100元)"
+      "quota_third": "限大额(单日上限100元)",
+      "quota_direct": null
     },
     {
       "code": "017641",
@@ -12540,7 +12648,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.92
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "019305",
@@ -12651,7 +12760,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.92
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "096001",
@@ -12762,7 +12872,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.7
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "008401",
@@ -12873,7 +12984,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.7
         }
       ],
-      "quota": "限大额(单日投资上限10元)"
+      "quota_third": "限大额(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "018065",
@@ -12984,7 +13096,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.84
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "018064",
@@ -13095,7 +13208,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.84
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "050025",
@@ -13206,7 +13320,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.93
         }
       ],
-      "quota": "暂停申购"
+      "quota_third": "暂停申购",
+      "quota_direct": null
     },
     {
       "code": "006075",
@@ -13317,7 +13432,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.93
         }
       ],
-      "quota": "暂停申购"
+      "quota_third": "暂停申购",
+      "quota_direct": null
     },
     {
       "code": "017028",
@@ -13428,7 +13544,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.48
         }
       ],
-      "quota": "暂停申购(单日投资上限10000元)"
+      "quota_third": "暂停申购(单日投资上限10000元)",
+      "quota_direct": null
     },
     {
       "code": "017030",
@@ -13539,7 +13656,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.48
         }
       ],
-      "quota": "暂停申购(单日投资上限10000元)"
+      "quota_third": "暂停申购(单日投资上限10000元)",
+      "quota_direct": null
     },
     {
       "code": "007721",
@@ -13650,7 +13768,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.93
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "007722",
@@ -13761,7 +13880,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.93
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "022523",
@@ -13872,7 +13992,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.94
         }
       ],
-      "quota": "暂停申购"
+      "quota_third": "暂停申购",
+      "quota_direct": null
     },
     {
       "code": "161125",
@@ -13983,7 +14104,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.93
         }
       ],
-      "quota": "暂停申购(单日投资上限10元)"
+      "quota_third": "暂停申购(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "012860",
@@ -14094,7 +14216,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -0.93
         }
       ],
-      "quota": "暂停申购(单日投资上限10元)"
+      "quota_third": "暂停申购(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "161128",
@@ -14208,7 +14331,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.03
         }
       ],
-      "quota": "暂停申购(单日投资上限10元)"
+      "quota_third": "暂停申购(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "012868",
@@ -14322,7 +14446,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.03
         }
       ],
-      "quota": "暂停申购(单日投资上限10元)"
+      "quota_third": "暂停申购(单日投资上限10元)",
+      "quota_direct": null
     },
     {
       "code": "017091",
@@ -14436,7 +14561,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.3
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     },
     {
       "code": "017093",
@@ -14550,7 +14676,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
           "rate": -1.3
         }
       ],
-      "quota": "暂停申购(单日投资上限100元)"
+      "quota_third": "暂停申购(单日投资上限100元)",
+      "quota_direct": null
     }
   ]
 }</script>
