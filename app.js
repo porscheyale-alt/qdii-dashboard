@@ -34,7 +34,7 @@
   else{
     fetch("data.json").then(r=>r.json()).then(boot).catch(err=>{
       document.getElementById("tbody").innerHTML =
-        '<tr><td colspan="7" class="empty">数据加载失败：请通过本地服务器打开，或运行 fetch_data.py 生成 data.json</td></tr>';
+        '<tr><td colspan="8" class="empty">数据加载失败：请通过本地服务器打开，或运行 fetch_data.py 生成 data.json</td></tr>';
     });
   }
 
@@ -43,6 +43,15 @@
     const c = r>0?UP:(r<0?DOWN:"");
     const s = (r>0?"+":"")+r.toFixed(2)+"%";
     return {t:s,c:c};
+  }
+
+  // 申购额度：暂停=红、限大额=橙、开放=绿、未知=灰
+  function fmtQuota(q){
+    if(!q) return {t:"--", cls:"q-unknown"};
+    let cls = "q-open";
+    if(q.indexOf("暂停")>=0) cls = "q-close";
+    else if(q.indexOf("限")>=0 || q.indexOf("上限")>=0) cls = "q-limit";
+    return {t:q, cls:cls};
   }
 
   function render(){
@@ -59,7 +68,8 @@
     document.getElementById("foot").innerHTML =
       "说明：净值来源于公开数据（天天基金），QDII 单位净值通常 T+1（部分 T+2）公布，非实时行情。"+
       "颜色遵循 A 股习惯：<span class='up'>涨为红</span> / <span class='down'>跌为绿</span>。"+
-      "点击任意一行查看近 30 日净值走势。额度信息因每日变化极小，未纳入监控。";
+      "申购额度：<span class='quota q-open'>开放</span> / <span class='quota q-limit'>限大额</span> / <span class='quota q-close'>暂停</span>，随净值同步更新。"+
+      "点击任意一行查看近 30 日净值走势。";
     bindEvents();
     bindResizeOnce();
   }
@@ -149,7 +159,7 @@
       const msg = state.group==="自选"
         ? "还没有自选基金。点任意一行左侧的 ☆ 收藏，收藏后可在这里集中查看。"
         : "无匹配基金";
-      tb.innerHTML = '<tr><td colspan="7" class="empty">'+msg+'</td></tr>';
+      tb.innerHTML = '<tr><td colspan="8" class="empty">'+msg+'</td></tr>';
       return;
     }
     // 手机端走势图缩窄（Chart.js responsive:false 读 canvas 属性尺寸，故由 JS 控制）
@@ -159,12 +169,14 @@
       const r = fmtRate(f.latest_rate);
       const on = isFav(f.code);
       const pillCls = r.c===UP?"up":(r.c===DOWN?"down":"flat");
+      const q = fmtQuota(f.quota);
       return `<tr data-code="${f.code}">
         <td class="star-col"><span class="star ${on?'on':''}" data-fav="${f.code}" title="${on?'取消自选':'加入自选'}">${on?'★':'☆'}</span></td>
         <td class="fname">${f.name}<div class="code">${f.code}</div></td>
         <td class="col-group"><span class="grp-tag">${f.group}</span></td>
         <td class="num">${f.latest_nav.toFixed(4)}</td>
         <td class="num"><span class="pill ${pillCls}">${r.t}</span></td>
+        <td class="col-quota"><span class="quota ${q.cls}">${q.t}</span></td>
         <td class="col-spark"><canvas class="spark" id="sp_${f.code}" width="${spW}" height="${spH}"></canvas></td>
         <td class="num code col-date">${f.latest_date}</td>
       </tr>`;
