@@ -74,6 +74,12 @@ header h1 .dot{width:10px;height:10px;border-radius:50%;background:#ff9585;
 .intro .how{margin-top:11px;padding-top:11px;border-top:1px dashed var(--line);
   color:var(--sub);font-size:11.5px;line-height:1.65}
 .intro .how b{color:var(--brand)}
+/* 手机端介绍条可折叠：默认只显示标题行，点击展开/收起 */
+.intro-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.intro-toggle{display:none;background:none;border:1px solid var(--line);border-radius:6px;
+  padding:4px 10px;font-size:11px;color:var(--sub);cursor:pointer;white-space:nowrap;
+  transition:background .2s}
+.intro-toggle:hover{background:#fff0f0;color:var(--brand)}
 
 /* 区块小标题：让每个功能块身份清晰 */
 .sec-head{display:flex;align-items:center;gap:9px;margin:0 2px 12px}
@@ -207,6 +213,10 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
   .sortsel{padding:8px 8px;border-radius:9px;font-size:12px;min-width:0;flex-shrink:0;width:auto}
   /* 手机端保留走势和申购额度（核心信息），只隐藏分组和净值日期 */
   .col-group,.col-date{display:none}
+  /* 手机端介绍条默认折叠，节省首屏空间 */
+  .intro-body{display:none}
+  .intro.open .intro-body{display:block}
+  .intro-toggle{display:inline-block}
   .fname{max-width:none;font-size:13px}
   tbody td,thead th{padding:10px 7px}
   .col-spark{padding-left:3px;padding-right:3px}
@@ -253,7 +263,8 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
 </header>
 <div class="wrap">
   <div class="intro">
-    <h2>QDII 全球基金 · 每日净值看板</h2>
+    <div class="intro-head"><h2>QDII 全球基金 · 每日净值看板</h2><button class="intro-toggle" onclick="this.closest('.intro').classList.toggle('open');this.textContent=this.closest('.intro').classList.contains('open')?'收起 ▲':'展开 ▼'">展开 ▼</button></div>
+    <div class="intro-body">
     <div class="lead">一个集中查看 <b>QDII 全球基金</b>每日净值的看板。覆盖<b>美股主动基、纳斯达克100、标普500</b>及<b>科技成长</b>等主题，数据每日自动更新，一屏掌握涨跌与走势。</div>
     <div class="feats">
       <div class="feat"><div class="ic">全</div><div class="tx"><b>覆盖全面</b><span>百余只 QDII 基金，分组归类</span></div></div>
@@ -262,6 +273,7 @@ th.star-col,td.star-col{width:42px;text-align:center;padding-left:8px;padding-ri
       <div class="feat"><div class="ic">选</div><div class="tx"><b>分组自选</b><span>顶部切换分组，★收藏常看基金</span></div></div>
     </div>
     <div class="how">用法：顶部<b>分组标签</b>切换方向 · <b>搜索框</b>按名称/代码查找 · 点击<b>任意一行</b>展开走势图与历史净值明细。数据来源天天基金公开接口，单位净值 T+1/T+2 公布，非实时行情。</div>
+    </div>
   </div>
   <div class="block" id="indicesBlock">
     <div class="sec-head"><span class="bar"></span><span class="t">美股核心指数</span><span class="s">为 QDII 净值涨跌提供参照系</span></div>
