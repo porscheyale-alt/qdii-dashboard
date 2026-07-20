@@ -62,6 +62,7 @@
     const fetchTime = (DATA.updated_at||"").slice(5,16); // 07-16 11:36
     document.getElementById("metaInfo").innerHTML =
       "净值日期 <b>"+navDate+"</b> ｜ 共 "+DATA.count+" 只 ｜ 数据抓取 "+fetchTime;
+    buildIndices();
     buildTabs();
     buildSummary();
     buildTable();
@@ -69,6 +70,7 @@
       "说明：净值来源于公开数据（天天基金），QDII 单位净值通常 T+1（部分 T+2）公布，非实时行情。"+
       "颜色遵循 A 股习惯：<span class='up'>涨为红</span> / <span class='down'>跌为绿</span>。"+
       "申购额度：<span class='quota q-open'>开放</span> / <span class='quota q-limit'>限大额</span> / <span class='quota q-close'>暂停</span>，随净值同步更新。"+
+      "<b>申购额度为公开平台数据</b>，实际能否买入、最多能买多少，以你使用的购买渠道显示为准，本表仅供参考。"+
       "点击任意一行查看近 30 日净值走势。";
     bindEvents();
     bindResizeOnce();
@@ -88,12 +90,34 @@
     });
   }
 
+  // 美股核心指数概览：为 QDII 净值涨跌提供参照系（涨红跌绿）
+  function buildIndices(){
+    const el = document.getElementById("indices");
+    if(!el) return;
+    const block = document.getElementById("indicesBlock");
+    const list = DATA.indices || [];
+    if(!list.length){ el.innerHTML=""; if(block) block.style.display="none"; return; }
+    if(block) block.style.display="";
+    el.innerHTML = list.map((ix,i)=>{
+      const cls = ix.rate>0?"up":(ix.rate<0?"down":"");
+      const sign = ix.rate>0?"+":"";
+      const pt = ix.point.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+      const tip = i===0?'<span class="tip">收盘参考</span>':'';
+      return `<div class="ix ${cls}">${tip}<div class="nm">${ix.name}</div>`+
+             `<div class="pt">${pt}</div>`+
+             `<div class="ch">${sign}${ix.change.toFixed(2)}　${sign}${ix.rate.toFixed(2)}%</div></div>`;
+    }).join("");
+  }
+
   function groups(){
     const g = ["全部"];
     DATA.funds.forEach(f=>{
       if(f.group && !g.includes(f.group)) g.push(f.group);
       (f.tags||[]).forEach(t=>{ if(!g.includes(t)) g.push(t); });
     });
+    // 「科技成长」固定排在最后
+    const idx = g.indexOf("科技成长");
+    if(idx > -1) g.push(g.splice(idx, 1)[0]);
     return g;
   }
 
