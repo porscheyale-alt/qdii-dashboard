@@ -11999,7 +11999,7 @@
           "rate": -0.9
         }
       ],
-      "quota_third": "暂停申购(单日投资上限10元)",
+      "quota_third": null,
       "quota_direct": null
     },
     {
