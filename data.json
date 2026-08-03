@@ -1,7 +1,26 @@
 {
   "updated_at": "2026-08-03 15:55:51",
   "count": 127,
-  "indices": [],
+  "indices": [
+    {
+      "name": "纳斯达克",
+      "point": 25131.39,
+      "rate": 0.04,
+      "change": 9.21
+    },
+    {
+      "name": "标普500",
+      "point": 7425.5,
+      "rate": -0.16,
+      "change": -12.13
+    },
+    {
+      "name": "道琼斯",
+      "point": 52134.3,
+      "rate": -0.14,
+      "change": -73.76
+    }
+  ],
   "funds": [
     {
       "code": "012920",
@@ -4909,7 +4928,7 @@
           "rate": 1.08
         }
       ],
-      "quota_third": "限大额(单日投资上限1000元)",
+      "quota_third": null,
       "quota_direct": null
     },
     {
