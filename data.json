@@ -1,24 +1,12 @@
 {
-  "updated_at": "2026-09-24 16:36:18",
+  "updated_at": "2026-09-25 16:41:10",
   "count": 127,
   "indices": [
     {
       "name": "纳斯达克",
-      "point": 26890.55,
-      "rate": -0.17,
-      "change": -45.49
-    },
-    {
-      "name": "标普500",
-      "point": 7699.23,
-      "rate": -0.09,
-      "change": -6.8
-    },
-    {
-      "name": "道琼斯",
-      "point": 51369.03,
-      "rate": -0.28,
-      "change": -142.56
+      "point": 27075.07,
+      "rate": 0.5,
+      "change": 135.7
     }
   ],
   "funds": [
@@ -11215,7 +11203,7 @@
           "rate": -0.78
         }
       ],
-      "quota_third": null,
+      "quota_third": "暂停申购(单日投资上限100元)",
       "quota_direct": null
     },
     {
