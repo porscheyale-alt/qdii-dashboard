@@ -1,20 +1,7 @@
 {
-  "updated_at": "2026-10-02 17:32:38",
+  "updated_at": "2026-10-06 18:00:12",
   "count": 127,
-  "indices": [
-    {
-      "name": "纳斯达克",
-      "point": 27159.41,
-      "rate": 1.07,
-      "change": 287.81
-    },
-    {
-      "name": "标普500",
-      "point": 7716.65,
-      "rate": 0.65,
-      "change": 50.2
-    }
-  ],
+  "indices": [],
   "funds": [
     {
       "code": "012920",
@@ -6281,7 +6268,7 @@
           "rate": -0.21
         }
       ],
-      "quota_third": "开放申购",
+      "quota_third": null,
       "quota_direct": null
     },
     {
@@ -13113,7 +13100,7 @@
           "rate": -0.14
         }
       ],
-      "quota_third": "暂停申购",
+      "quota_third": null,
       "quota_direct": null
     },
     {
