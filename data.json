@@ -1,7 +1,14 @@
 {
-  "updated_at": "2026-10-06 18:00:12",
+  "updated_at": "2026-10-07 18:30:22",
   "count": 127,
-  "indices": [],
+  "indices": [
+    {
+      "name": "纳斯达克",
+      "point": 27519.51,
+      "rate": -0.29,
+      "change": -80.38
+    }
+  ],
   "funds": [
     {
       "code": "012920",
@@ -6268,7 +6275,7 @@
           "rate": -0.21
         }
       ],
-      "quota_third": null,
+      "quota_third": "开放申购",
       "quota_direct": null
     },
     {
@@ -6604,7 +6611,7 @@
           "rate": -0.03
         }
       ],
-      "quota_third": "限大额(单日投资上限1000元)",
+      "quota_third": null,
       "quota_direct": null
     },
     {
@@ -13100,7 +13107,7 @@
           "rate": -0.14
         }
       ],
-      "quota_third": null,
+      "quota_third": "暂停申购",
       "quota_direct": null
     },
     {
